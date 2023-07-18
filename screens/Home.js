@@ -1,21 +1,45 @@
-import { Box, Text, Button, VStack, Image } from 'native-base'
+import { Box, Text, Button, VStack } from 'native-base';
+import { ImageBackground } from 'react-native';
+import { bgImageLight } from '../utils/images';
 
 export default function HomeScreen({ navigation }) {
-  const splashImage = '../assets/splash.png'
-
   return (
-    <Box style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text position='absolute' top={10} fontSize='xl'>
-        Welcome to Youth Connect!
-      </Text>
+    <Box
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        height: '100%',
+      }}
+    >
+      <ImageBackground
+        source={bgImageLight}
+        resizeMode='cover'
+        style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}
+      >
+        <Text
+          textAlign={'center'}
+          fontSize='xl'
+        >
+          Welcome to Youth Connect!
+        </Text>
 
-      <VStack space={4} alignItems='center'>
-        <Button onPress={() => navigation.navigate('Login')}>Log In</Button>
+        <VStack
+          space={4}
+          alignItems='center'
+        >
+          <Button
+            width='105px'
+            onPress={() => navigation.navigate('Login')}
+          >
+            Log In
+          </Button>
 
-        <Button onPress={() => navigation.navigate('RoomList')}>
-          Join a room
-        </Button>
-      </VStack>
+          <Button onPress={() => navigation.navigate('Rooms')}>
+            Join a room
+          </Button>
+        </VStack>
+      </ImageBackground>
     </Box>
-  )
+  );
 }
