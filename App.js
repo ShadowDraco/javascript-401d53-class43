@@ -1,38 +1,23 @@
-import 'react-native-gesture-handler'
-import { NativeBaseProvider } from 'native-base'
+import 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NativeBaseProvider } from 'native-base';
+import { NavigationContainer } from '@react-navigation/native';
 
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-
-import HomeScreen from './screens/Home'
-import RoomList from './screens/RoomList'
-import Login from './screens/Login'
-import { useState } from 'react'
-import Room from './screens/Room'
-
-const Stack = createNativeStackNavigator()
+import TabNav from './components/TabNav';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
-  const [user, setUser] = useState(null)
-  //? Runs whenever there is new trigger from the backend
-  /*
-  useEffect(() => {
-    socket.on('roomsList', rooms => {
-      setRooms(rooms)
-    })
-  }, [socket])
-  */
-
   return (
-    <NativeBaseProvider>
+    <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home'>
-          <Stack.Screen name='Home' component={HomeScreen} />
-          <Stack.Screen name='Login' component={Login} />
-          <Stack.Screen name='RoomList' component={RoomList} />
-          <Stack.Screen name='Room' component={Room} />
-        </Stack.Navigator>
+        <NativeBaseProvider>
+          <TabNav />
+        </NativeBaseProvider>
       </NavigationContainer>
-    </NativeBaseProvider>
-  )
+      <StatusBar
+        style='dark'
+        hidden={true}
+      />
+    </SafeAreaProvider>
+  );
 }

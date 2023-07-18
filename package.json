@@ -28,7 +28,9 @@
     "react-native-tab-view": "^3.5.2",
     "react-navigation": "^4.4.4",
     "socket.io-client": "^4.7.1",
-    "expo-system-ui": "~2.2.1"
+    "expo-system-ui": "~2.2.1",
+    "expo-dev-client": "~2.2.1",
+    "expo-haptics": "~12.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
