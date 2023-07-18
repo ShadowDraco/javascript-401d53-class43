@@ -10,6 +10,10 @@ To prepare for the final project and learn how to use **React Native** I am buil
 
 ### Author: Ethan Storm
 
+### Links and Resources
+
+[Expo Snack](https://snack.expo.dev/@stormyfrolic/github.com-shadowdraco-javascript-401d53-class43)
+
 ### Collaborators: Code Fellows Lab 43
 
 **Lab/Coding Session #1** - Focus on getting your dev system up and operational, getting "proof of life" and reaching your MVP in terms of baseline functionality
@@ -23,9 +27,45 @@ To prepare for the final project and learn how to use **React Native** I am buil
 - Properly Documented for End Users
 - Live Demo & Presentation
 
+- Use 2 screens / components
+- Use and share state between components/screens
+
 ### Milestone 1 - MVP
 
 - Deliver your MVP for raw functionality
 - Your dev environment should be properly working
 - Other users should be able to scan your QR and see your app on any device
 - All of your core "features" should be working properly
+
+### Milestone 2 - Product Delivery (This Lab)
+
+As you complete your RNA, switch your focus to the user experience.
+
+- Quality and Thoughtful Styling using `css-in-js`
+- Right sized tap targets, good contrast
+- Dark and Light Modes
+- Well thought through UX
+
+### How to use locally?
+
+- run `npm i` to install all dependencies
+- run `npx expo start` to start the environment
+- scan the qr code with your phone to launch through `Expo Go`
+
+### What features does it have?
+
+- Custom splash screen logo
+- Custom backgrounds with themes
+- 4 Screens with Tab Navigation
+- Uses Youth Connect API
+  - login/signup
+  - rooms
+  - messages
+
+To use the app after opening simply log in
+
+- test user:
+  username: 'user'
+  password: 'pass'
+
+  join a room and read/send messages in the room
