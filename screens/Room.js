@@ -22,6 +22,7 @@ export default function Room({ route, navigation }) {
 
     fetchMessages()
   }, [])
+
   return (
     <Box>
       <Text>You are in room: {roomName}</Text>
