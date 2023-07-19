@@ -48,9 +48,17 @@ As you complete your RNA, switch your focus to the user experience.
 
 ### How to use locally?
 
+_Developer way_
+
 - run `npm i` to install all dependencies
 - run `npx expo start` to start the environment
 - scan the qr code with your phone to launch through `Expo Go`
+
+_App user way_
+
+- download the apk from LATESTBUILD folder to your **android** phone
+- convert the aab to apk using app in the play store
+- install the apk and open the app 'tryChatApp'
 
 ### What features does it have?
 
