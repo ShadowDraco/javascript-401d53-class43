@@ -1,6 +1,5 @@
 import {
   VStack,
-  HStack,
   FormControl,
   Input,
   Box,
@@ -8,75 +7,81 @@ import {
   Center,
   Button,
   ScrollView,
-} from 'native-base'
-import React, { useEffect, useState, useContext } from 'react'
-import { ImageBackground, Dimensions } from 'react-native'
-import { colors, styles } from '../utils/styles'
-import { UserContext, ThemeContext } from '../App'
-import socket from '../utils/socket'
+} from 'native-base';
+import React, { useEffect, useState, useContext } from 'react';
+import { ImageBackground } from 'react-native';
+
+import * as Haptics from 'expo-haptics';
+
+import { colors, styles } from '../utils/styles';
+import { UserContext, ThemeContext } from '../App';
+import socket from '../utils/socket';
 
 export default function Room({ route, navigation }) {
-  const { colorScheme, bgImage } = useContext(ThemeContext)
-  const { user, room, setRoom } = useContext(UserContext)
+  const { colorScheme, bgImage } = useContext(ThemeContext);
+  const { user, room, setRoom } = useContext(UserContext);
 
-  let themeContainerStyle
-  let themeTextStyle
+  let themeContainerStyle;
+  let themeTextStyle;
 
   if (colorScheme === 'dark') {
-    themeContainerStyle = styles.darkContainer
-    themeTextStyle = styles.darkThemeText
+    themeContainerStyle = styles.darkContainer;
+    themeTextStyle = styles.darkThemeText;
   } else {
-    themeContainerStyle = styles.lightContainer
-    themeTextStyle = styles.lightThemeText
+    themeContainerStyle = styles.lightContainer;
+    themeTextStyle = styles.lightThemeText;
   }
-
-  const windowWidth = Dimensions.get('window').width
 
   const handleSubmit = () => {
     const payload = {
       text: message,
       room: room,
       username: user.username,
-    }
+    };
 
-    socket.emit('MESSAGE', payload)
-  }
+    socket.emit('MESSAGE', payload);
+  };
 
-  const [messages, setMessages] = useState([])
-  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     function fetchMessages() {
       fetch(`https://youth-connect-backend.onrender.com/api/v1/messages`)
         .then(res => res.json())
         .then(data => {
-          let filteredMessages = data.filter(message => message.room === room)
+          let filteredMessages = data.filter(message => message.room === room);
 
-          setMessages(filteredMessages)
+          setMessages(filteredMessages);
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(err));
     }
 
-    fetchMessages()
-  }, [room])
+    fetchMessages();
+  }, [room]);
 
   return (
-    <Box style={[styles.container, themeContainerStyle]} safeArea>
-      <ImageBackground source={bgImage} resizeMode='cover' style={{ flex: 1 }}>
-        <Box
-          width={windowWidth}
-          height={70}
-          padding={2}
-          mb={5}
-          style={themeContainerStyle}
-        >
+    <Box
+      style={[styles.container, themeContainerStyle]}
+      safeArea
+    >
+      <ImageBackground
+        source={bgImage}
+        resizeMode='cover'
+        style={{ flex: 1 }}
+      >
+        <Box mt={12}>
           {room && room !== 'none' ? (
             <>
               <Text fontSize={'md'}>Signed in as: {user.username}</Text>
               <Text fontSize='md'>You are in room: {room}</Text>
             </>
           ) : (
-            <Text style={themeTextStyle} textAlign={'center'} fontSize={'lg'}>
+            <Text
+              style={themeTextStyle}
+              textAlign={'center'}
+              fontSize={'lg'}
+            >
               Please join a room
             </Text>
           )}
@@ -85,9 +90,9 @@ export default function Room({ route, navigation }) {
             <Button
               size={'sm'}
               onPress={() => {
-                setMessages([])
-                setRoom('none')
-                navigation.navigate('Rooms')
+                setMessages([]);
+                setRoom('none');
+                navigation.navigate('Rooms');
               }}
             >
               Leave
@@ -101,7 +106,12 @@ export default function Room({ route, navigation }) {
           alignContent={'center'}
           contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
         >
-          <VStack mt={10} mb={50} space={4} alignItems='center'>
+          <VStack
+            mt={10}
+            mb={50}
+            space={4}
+            alignItems='center'
+          >
             {messages.length > 0 &&
               messages.map((message, i) => {
                 return (
@@ -116,11 +126,14 @@ export default function Room({ route, navigation }) {
                     rounded='md'
                     shadow={3}
                   >
-                    <Text style={themeTextStyle} fontSize={'md'}>
+                    <Text
+                      style={themeTextStyle}
+                      fontSize={'md'}
+                    >
                       {message.username}: {message.text}
                     </Text>
                   </Center>
-                )
+                );
               })}
           </VStack>
         </ScrollView>
@@ -128,12 +141,18 @@ export default function Room({ route, navigation }) {
           <VStack>
             <FormControl>
               <FormControl.Label>Send a message</FormControl.Label>
-              <Input style={themeContainerStyle} onChangeText={setMessage} />
+              <Input
+                style={themeContainerStyle}
+                onChangeText={setMessage}
+              />
             </FormControl>
             <Button
               mt='2'
               colorScheme='cyan'
-              onPress={handleSubmit}
+              onPress={() => {
+                handleSubmit();
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               disabled={!room || room === 'none' ? true : false}
             >
               Send
@@ -142,5 +161,5 @@ export default function Room({ route, navigation }) {
         )}
       </ImageBackground>
     </Box>
-  )
+  );
 }
