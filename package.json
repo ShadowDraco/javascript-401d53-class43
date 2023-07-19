@@ -15,8 +15,13 @@
     "@react-navigation/native-stack": "^6.9.13",
     "@types/react": "~18.0.27",
     "@types/react-native": "^0.72.2",
+    "axios": "^1.4.0",
+    "base-64": "^1.0.0",
     "expo": "~48.0.18",
+    "expo-dev-client": "~2.2.1",
+    "expo-haptics": "~12.2.1",
     "expo-status-bar": "~1.4.4",
+    "expo-system-ui": "~2.2.1",
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.71.8",
@@ -27,10 +32,7 @@
     "react-native-svg": "13.4.0",
     "react-native-tab-view": "^3.5.2",
     "react-navigation": "^4.4.4",
-    "socket.io-client": "^4.7.1",
-    "expo-system-ui": "~2.2.1",
-    "expo-dev-client": "~2.2.1",
-    "expo-haptics": "~12.2.1"
+    "socket.io-client": "^4.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

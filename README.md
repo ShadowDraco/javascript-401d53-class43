@@ -65,7 +65,9 @@ As you complete your RNA, switch your focus to the user experience.
 To use the app after opening simply log in
 
 - test user:
-  username: 'user'
-  password: 'pass'
+  username: 'user' or 'User'
+  password: 'pass' or 'Pass'
 
   join a room and read/send messages in the room
+
+  - _sending messages currently not working on Backend_

@@ -1,71 +1,93 @@
-import { VStack, Box, Text, Center, Button } from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { ImageBackground } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { bgImageLight } from '../utils/images';
-import { Dimensions } from 'react-native';
-import { colors } from '../utils/colors';
+import {
+  VStack,
+  HStack,
+  FormControl,
+  Input,
+  Box,
+  Text,
+  Center,
+  Button,
+  ScrollView,
+} from 'native-base'
+import React, { useEffect, useState, useContext } from 'react'
+import { ImageBackground, Dimensions } from 'react-native'
+import { colors, styles } from '../utils/styles'
+import { UserContext, ThemeContext } from '../App'
+import socket from '../utils/socket'
 
 export default function Room({ route, navigation }) {
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
+  const { colorScheme, bgImage } = useContext(ThemeContext)
+  const { user, room, setRoom } = useContext(UserContext)
 
-  const { roomName } = route.params ? route.params : 'none';
+  let themeContainerStyle
+  let themeTextStyle
 
-  const [messages, setMessages] = useState([]);
+  if (colorScheme === 'dark') {
+    themeContainerStyle = styles.darkContainer
+    themeTextStyle = styles.darkThemeText
+  } else {
+    themeContainerStyle = styles.lightContainer
+    themeTextStyle = styles.lightThemeText
+  }
+
+  const windowWidth = Dimensions.get('window').width
+
+  const handleSubmit = () => {
+    const payload = {
+      text: message,
+      room: room,
+      username: user.username,
+    }
+
+    socket.emit('MESSAGE', payload)
+  }
+
+  const [messages, setMessages] = useState([])
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     function fetchMessages() {
       fetch(`https://youth-connect-backend.onrender.com/api/v1/messages`)
         .then(res => res.json())
         .then(data => {
-          let filteredMessages = data.filter(
-            message => message.room === roomName
-          );
+          let filteredMessages = data.filter(message => message.room === room)
 
-          console.log('got messages');
-          setMessages(filteredMessages);
+          setMessages(filteredMessages)
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
     }
 
-    fetchMessages();
-  }, [roomName]);
+    fetchMessages()
+  }, [room])
 
   return (
-    <Box
-      style={{ flex: 1, justifyContent: 'center', height: '100%' }}
-      safeArea
-    >
-      <ImageBackground
-        source={bgImageLight}
-        resizeMode='cover'
-        style={{ flex: 1 }}
-      >
+    <Box style={[styles.container, themeContainerStyle]} safeArea>
+      <ImageBackground source={bgImage} resizeMode='cover' style={{ flex: 1 }}>
         <Box
-          backgroundColor={colors.secondary}
           width={windowWidth}
           height={70}
           padding={2}
+          mb={5}
+          style={themeContainerStyle}
         >
-          {roomName && roomName !== 'none' ? (
-            <Text fontSize='md'>You are in room: {roomName}</Text>
+          {room && room !== 'none' ? (
+            <>
+              <Text fontSize={'md'}>Signed in as: {user.username}</Text>
+              <Text fontSize='md'>You are in room: {room}</Text>
+            </>
           ) : (
-            <Text
-              textAlign={'center'}
-              fontSize={'lg'}
-            >
+            <Text style={themeTextStyle} textAlign={'center'} fontSize={'lg'}>
               Please join a room
             </Text>
           )}
 
-          {roomName && roomName !== 'none' && (
+          {room && room !== 'none' && (
             <Button
               size={'sm'}
               onPress={() => {
-                setMessages([]);
-                route.params.roomName = 'none';
-                navigation.navigate('Rooms');
+                setMessages([])
+                setRoom('none')
+                navigation.navigate('Rooms')
               }}
             >
               Leave
@@ -73,32 +95,52 @@ export default function Room({ route, navigation }) {
           )}
         </Box>
 
-        <ScrollView maxH={100}>
-          <VStack
-            mt={10}
-            mb={50}
-            maxH={200}
-            space={4}
-            alignItems='center'
-            backgroundColor={colors.background}
-          >
+        <ScrollView
+          mt={5}
+          maxH={400}
+          alignContent={'center'}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        >
+          <VStack mt={10} mb={50} space={4} alignItems='center'>
             {messages.length > 0 &&
               messages.map((message, i) => {
                 return (
                   <Center
                     key={i}
                     w='80'
-                    bg={colors.backgroundDark}
+                    bg={
+                      colorScheme === 'light'
+                        ? colors.backgroundDark
+                        : colors.darkBackground
+                    }
                     rounded='md'
                     shadow={3}
                   >
-                    <Text fontSize={'md'}>{message.text}</Text>
+                    <Text style={themeTextStyle} fontSize={'md'}>
+                      {message.username}: {message.text}
+                    </Text>
                   </Center>
-                );
+                )
               })}
           </VStack>
         </ScrollView>
+        {user?.username && (
+          <VStack>
+            <FormControl>
+              <FormControl.Label>Send a message</FormControl.Label>
+              <Input style={themeContainerStyle} onChangeText={setMessage} />
+            </FormControl>
+            <Button
+              mt='2'
+              colorScheme='cyan'
+              onPress={handleSubmit}
+              disabled={!room || room === 'none' ? true : false}
+            >
+              Send
+            </Button>
+          </VStack>
+        )}
       </ImageBackground>
     </Box>
-  );
+  )
 }
